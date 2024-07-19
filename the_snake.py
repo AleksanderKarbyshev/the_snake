@@ -38,11 +38,6 @@ class GameObject:
         self.position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.body_color = body_color
 
-    def update_direction(self, new_direction: Tuple[int, int]) -> None:
-        """Обновляем направление змейки"""
-        if new_direction != (self.direction[0] * -1, self.direction[1] * -1):
-            self.next_direction = new_direction
-
     def draw(self, body: pygame.Surface) -> None:
         """Абстрактный метод"""
         pass
@@ -65,6 +60,11 @@ class Snake(GameObject):
                           GRID_HEIGHT // 2 * GRID_SIZE), SNAKE_COLOR)
         self.reset()
         self.next_direction: Optional[Tuple[int, int]] = None
+
+    def update_direction(self, new_direction: Tuple[int, int]) -> None:
+        """Обновляем направление змейки"""
+        if new_direction != (self.direction[0] * -1, self.direction[1] * -1):
+            self.next_direction = new_direction
 
     def move(self) -> None:
         """Прописываем движения змейки"""
