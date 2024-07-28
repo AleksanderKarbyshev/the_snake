@@ -43,13 +43,13 @@ class GameObject:
         """Абстрактный метод"""
         pass
 
-    def draw_cell(self, body: pygame.Surface,
-                  position: Tuple[int, int]) -> None:
+    def draw_cell(self, body: pygame.Surface, position: Tuple[int, int],
+                  color: Optional[Tuple[int, int, int]] = None) -> None:
         """Отрисовываем ячейки на экране и далее будем пользоваться
         в дочерних классах для отрисовки объектов
         """
         rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
-        pygame.draw.rect(body, self.body_color, rect)
+        pygame.draw.rect(body, color or self.body_color, rect)
 
 
 class Snake(GameObject):
@@ -78,13 +78,13 @@ class Snake(GameObject):
                          % SCREEN_HEIGHT)
         self.positions.insert(0, self.new_head)
         if len(self.positions) > self.length:
-            self.positions.pop()
             self.last = self.positions[-1]
+            self.positions.pop()
 
     def draw(self) -> None:
         """Отрисовываем змейку"""
         self.draw_cell(screen, self.positions[0])
-        self.draw_cell(screen, self.last)
+        self.draw_cell(screen, self.last, BOARD_BACKGROUND_COLOR)
 
     def get_head_position(self) -> Tuple[int, int]:
         """Возвращаем позицию головы змейки"""
@@ -96,6 +96,7 @@ class Snake(GameObject):
         self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
+        screen.fill(BOARD_BACKGROUND_COLOR)
 
 
 class Apple(GameObject):
@@ -152,7 +153,6 @@ def main():
             while apple.randomize_position() in snake.positions:
                 apple.randomize_position()
 
-        screen.fill(BOARD_BACKGROUND_COLOR)
         snake.draw()
         apple.draw()
 
